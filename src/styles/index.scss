@@ -1,3 +1,10 @@
+$primaryTextColor: rgb(255, 255, 255);
+$primaryBackgroundColor: rgb(0, 0, 0);
+$defaultFontSize: 16px;
+$boxOffBackground: rgb(210, 210, 210);
+$boxOnBackground: rgb(39, 146, 29);
+$boxHoverColor: rgb(0, 139, 174);
+
 * {
   margin: 0px;
   padding: 0px;
@@ -5,8 +12,8 @@
 }
 
 body {
-  background-color: black;
-  color: white;
+  background-color: $primaryBackgroundColor;
+  color: $primaryTextColor;
 }
 
 .debug {
@@ -16,9 +23,9 @@ body {
 nav {
   text-align: center;
   padding: 20px 0px;
-  font-size: 20px;
-  background-color: #1a1a1a;
-  box-shadow: 0px 5px 10px 0px #212121;
+  font-size: $defaultFontSize + 4px;
+  background-color: hsl(0, 0%, 10%);
+  box-shadow: 0px 5px 10px 0px rgb(33, 33, 33);
 }
 
 .container {
@@ -46,15 +53,13 @@ nav {
 }
 
 .off {
-  background-color: #d2d2d2;
+  background-color: $boxOffBackground;
 }
 
 .on {
-  background-color: #27921d;
+  background-color: $boxOnBackground;
 }
 
 .box:hover {
-  background-color: #008bae;
+  background-color: $boxHoverColor;
 }
-
-/*# sourceMappingURL=index.css.map */
