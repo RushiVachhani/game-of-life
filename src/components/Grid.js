@@ -8,7 +8,12 @@ const Grid = (props) => {
   const [rowsArray, setRowsArray] = useState([]);
 
   useEffect(() => {
-    initializeArrayWithBox();
+    if (
+      props.rows === props.fullGrid.length &&
+      props.cols === props.fullGrid[0].length
+    ) {
+      initializeArrayWithBox();
+    }
   }, [props]);
 
   const initializeArrayWithBox = () => {

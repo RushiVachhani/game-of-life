@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-
-import Grid from "./Grid";
 import useInterval from "../hooks/useInterval";
+
 import { constants } from "../utils/constants";
+import Grid from "./Grid";
 
 const Game = () => {
   // states
@@ -37,9 +37,7 @@ const Game = () => {
   };
 
   const seed = () => {
-    let fullGridClone = Array(rows)
-      .fill()
-      .map(() => Array(cols).fill(false));
+    let fullGridClone = JSON.parse(JSON.stringify(fullGrid));
     for (let i = 0; i < rows; i++) {
       for (let j = 0; j < cols; j++) {
         if (
@@ -88,18 +86,21 @@ const Game = () => {
     setGenerations(0);
   };
 
-  // const handleGridSizeChange = async (e) => {
-  //   const newRows = e.target.value.split("-")[0];
-  //   const newCols = e.target.value.split("-")[1];
-  //   // await setFullGrid(
-  //   //   Array(newRows)
-  //   //     .fill()
-  //   //     .map(() => Array(newCols).fill(false))
-  //   // );
-  //   // setRows(newRows);
-  //   // setCols(newCols);
-  //   // seed();
-  // };
+  const handleGridSizeChange = async (e) => {
+    if (running) {
+      setRunning(false);
+      setGenerations(0);
+    }
+    const newRows = parseInt(e.target.value.split("-")[0], 10);
+    const newCols = parseInt(e.target.value.split("-")[1], 10);
+    handleClear();
+    const newGrid = Array(newRows)
+      .fill()
+      .map(() => Array(newCols).fill(false));
+    setFullGrid(() => newGrid);
+    setRows(newRows);
+    setCols(newCols);
+  };
 
   const play = () => {
     if (!running) {
@@ -148,7 +149,9 @@ const Game = () => {
         <button type="button" className="btn" onClick={handleClear}>
           Clear
         </button>
-        {/* <select onChange={handleGridSizeChange}>
+        <label htmlFor="grid-size">Grid Size: </label>
+        <select id="grid-size" onChange={handleGridSizeChange}>
+          <option value="10-10">10 X 10</option>
           <option value="30-30">30 X 30</option>
           <option value="30-50" selected>
             30 X 50
@@ -157,7 +160,7 @@ const Game = () => {
           <option value="50-30">50 X 30</option>
           <option value="50-50">50 X 50</option>
           <option value="50-70">50 X 70</option>
-        </select> */}
+        </select>
       </div>
       <Grid fullGrid={fullGrid} rows={rows} cols={cols} selectBox={selectBox} />
       <h2>Generations: {generations}</h2>
