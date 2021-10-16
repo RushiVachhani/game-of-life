@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 
 import Grid from "./Grid";
+import useInterval from "../hooks/useInterval";
 
 const Game = () => {
   const rows = 30;
   const cols = 50;
-  let speed = 1000;
   const [generations, setGenerations] = useState(0);
-  const [intervalId, setIntervalId] = useState(null);
+  const [running, setRunning] = useState(false);
+  const [speed, setSpeed] = useState(500);
   const [fullGrid, setFullGrid] = useState(
     Array(rows)
       .fill()
@@ -28,7 +29,7 @@ const Game = () => {
       .map(() => Array(cols).fill(false));
     for (let i = 0; i < rows; i++) {
       for (let j = 0; j < cols; j++) {
-        if (Math.floor(Math.random() * 10) <= 2) {
+        if (Math.floor(Math.random() * 10) <= 3) {
           fullGridClone[i][j] = true;
         }
       }
@@ -37,39 +38,33 @@ const Game = () => {
   };
 
   const handlePlay = () => {
-    let newIntervalId;
-    if (intervalId !== null) {
-      clearInterval(intervalId);
-    }
-    newIntervalId = setInterval(play, speed);
-    setIntervalId(() => newIntervalId);
+    setRunning(true);
   };
 
-  const handlePause = () => {
-    console.log(intervalId);
+  useInterval(() => {
+    play();
+  }, speed);
 
-    clearInterval(intervalId);
+  const handlePause = () => {
+    setRunning(false);
   };
 
   const handleSlow = () => {
-    clearInterval(intervalId);
-    speed = 2000;
-    handlePlay();
+    setSpeed(1000);
   };
 
   const handleFast = () => {
-    console.log(intervalId);
-    clearInterval(intervalId);
-    speed = 500;
-    handlePlay();
+    setSpeed(100);
   };
 
   const handleSeed = () => {
-    clearInterval(intervalId);
     seed();
   };
 
   const play = () => {
+    if (!running) {
+      return;
+    }
     let fullGridClone = JSON.parse(JSON.stringify(fullGrid));
 
     for (let i = 0; i < rows; i++) {
@@ -94,8 +89,6 @@ const Game = () => {
 
   useEffect(() => {
     seed();
-
-    return () => clearInterval(intervalId);
   }, []);
 
   return (
